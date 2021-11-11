@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Login from "./components/Login";
+import PropTypes from "prop-types";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loadAdminData } from "./actions/adminActions";
+import { loadEmployeeData } from "./actions/employeeAction";
+import { fetchAdminData } from "./services/fetchAdminData";
+import { fetchEmployeeData } from "./services/fetchEmployeeData";
 
 function App() {
+  const dispatch = useDispatch();
+  const adminData = useSelector((state) => state.admin);
+  const employeesData = useSelector((state) => state.employees);
+  useEffect(() => {
+    console.log(adminData.name);
+    if (adminData.name === "") {
+      const adminData = fetchAdminData();
+      dispatch(loadAdminData(adminData));
+    }
+    if (employeesData.length === 0) {
+      const employeeData = fetchEmployeeData();
+      dispatch(loadEmployeeData(employeeData));
+    }
+  }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Login />
     </div>
   );
 }
+
+App.propTypes = {
+  user: PropTypes.number.isRequired,
+};
 
 export default App;

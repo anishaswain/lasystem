@@ -1,38 +1,56 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  padding-left: 4vmin;
   font-size: calc(10px + 2vmin);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.add-employee {
+  background-color: #5b5c5e;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 4vmin;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.admin-detail {
+  font-size: 2vmin;
+  text-align: left;
+}
+
+.employee-detail {
+  padding: 4vmin;
+  font-size: 3vmin;
+}
+
+header {
+  padding-top: 2em;
+}
+
+.approve {
+  background-color: red;
+  color: white;
+  margin-left: 5px;
+}
+
+.approved {
+  background-color: green;
+  color: white;
+  margin-left: 5px;
+}
+
+button {
+  padding: 1vmin;
+  margin: 2vmin;
+}
+
+input {
+  height: 4vmin;
+  margin: 1vmin;
 }
