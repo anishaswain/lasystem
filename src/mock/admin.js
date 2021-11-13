@@ -1,7 +1,7 @@
 export const adminData = {
   a_id: 0,
   name: "Anisha",
-  phone: "987654320",
+  phone: "0000000000",
   password: "password",
   age: 20,
   gender: "female",
