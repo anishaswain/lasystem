@@ -43,7 +43,7 @@ $ yarn start
 This will automatically open the application on [http://localhost:3000](http://localhost:8000).
 
 ## Deployment
-The deployed app can be found on [heroku](https://lasystem.herokuapp.com). 
+The deployed app can be found on [heroku](https://lassystem.herokuapp.com/). 
 Few Points to remember:
 - Mock Admin Credentials: 
   - phone: 0000000000
