@@ -4,26 +4,11 @@
 
 .Login-header {
   background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
 }
 
-button {
-  padding: 1vmin;
-  margin: 2vmin;
-}
-
-input {
-  height: 4vmin;
-  margin: 1vmin;
-}
-
-select {
-  height: 5vmin;
-  margin: 1vmin;
+.Login-form {
+  padding: 5% 20%;
 }

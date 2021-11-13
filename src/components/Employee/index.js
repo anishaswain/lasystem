@@ -6,17 +6,18 @@ import {
   changeLeaves,
   addLeaves,
 } from "../../actions/employeeAction";
+import { Card, Table, Space, DatePicker, Button, Tag } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { FaPencilAlt, FaCheck } from "react-icons/fa";
 
 function Employee() {
   const dispatch = useDispatch();
+  const [date, setDate] = useState();
   const [user, setUserData] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const userData = useSelector((state) => state.current);
   const employeesData = useSelector((state) => state.employees);
 
-  const dateRef = useRef();
   const ageRef = useRef();
   const genderRef = useRef();
   const addressRef = useRef();
@@ -31,17 +32,22 @@ function Employee() {
   }, [userData]);
 
   const deleteLeave = (leave) => {
-    const leavesLeft = user.leaves.filter((item) => item.date !== leave.date);
+    console.log(leave);
+    const leavesLeft = user.leaves.filter((item) => item.date !== leave);
     dispatch(changeLeaves({ id: userData.user, leaves: leavesLeft }));
   };
 
   const addLeave = () => {
-    const leave = dateRef.current.value;
+    const leave = date;
     const totalLeaves = [
       ...user.leaves,
-      { date: leave, status: "not-approved" },
+      { key: user.leaves.length + 1, date: leave, status: "not-approved" },
     ];
     dispatch(addLeaves({ id: userData.user, leaves: totalLeaves }));
+  };
+
+  const onChangeDate = (date, dateString) => {
+    setDate(dateString);
   };
 
   const changeUserData = () => {
@@ -62,6 +68,37 @@ function Employee() {
     setEditMode(false);
   };
 
+  const columns = [
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (text) => {
+        const color = text === "approved" ? "green" : "red";
+        return (
+          <Tag color={color} key={text}>
+            {text}
+          </Tag>
+        );
+      },
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (text, record) => (
+        <Space size="middle" onClick={() => deleteLeave(record.date)}>
+          <a>Delete</a>
+        </Space>
+      ),
+    },
+  ];
+
   return (
     <div className="App">
       <header className="App-header">
@@ -81,68 +118,6 @@ function Employee() {
             ) : (
               <></>
             )}
-            <div style={{ marginTop: "5vmin" }}>
-              <h1 className="admin-detail">
-                Name :{" "}
-                {editMode ? (
-                  <input
-                    className="edit-input"
-                    defaultValue={user.name}
-                    ref={nameRef}
-                  ></input>
-                ) : (
-                  user.name
-                )}
-              </h1>
-              <h1 className="admin-detail">
-                Phone :{" "}
-                {editMode ? (
-                  <input
-                    className="edit-input"
-                    defaultValue={user.phone}
-                    ref={phoneRef}
-                  ></input>
-                ) : (
-                  user.phone
-                )}
-              </h1>
-              <h1 className="admin-detail">
-                Age :{" "}
-                {editMode ? (
-                  <input
-                    className="edit-input"
-                    defaultValue={user.age}
-                    ref={ageRef}
-                  ></input>
-                ) : (
-                  user.age
-                )}
-              </h1>
-              <h1 className="admin-detail">
-                Gender :{" "}
-                {editMode ? (
-                  <input
-                    className="edit-input"
-                    defaultValue={user.gender}
-                    ref={genderRef}
-                  ></input>
-                ) : (
-                  user.gender
-                )}
-              </h1>
-              <h1 className="admin-detail">
-                Address :{" "}
-                {editMode ? (
-                  <input
-                    className="edit-input"
-                    defaultValue={user.address}
-                    ref={addressRef}
-                  ></input>
-                ) : (
-                  user.address
-                )}
-              </h1>
-            </div>
           </div>
           <div style={{ minWidth: "50%", float: "right" }}>
             <Logout />
@@ -150,30 +125,87 @@ function Employee() {
         </div>
       </header>
       <div className="employee-detail">
-        <div>
-          <div style={{ float: "right" }}>
-            Leaves:{" "}
-            <input type="date" id="laves" name="leaves" ref={dateRef}></input>
-            <button onClick={() => addLeave()}>Add Leaves</button>
+        <Card title={user.name} bordered={false} style={{ width: 300 }}>
+          <div>
+            <p>
+              Name :{" "}
+              {editMode ? (
+                <input
+                  className="edit-input"
+                  defaultValue={user.name}
+                  ref={nameRef}
+                ></input>
+              ) : (
+                user.name
+              )}
+            </p>
+            <p>
+              Phone :{" "}
+              {editMode ? (
+                <input
+                  className="edit-input"
+                  defaultValue={user.phone}
+                  ref={phoneRef}
+                ></input>
+              ) : (
+                user.phone
+              )}
+            </p>
+            <p>
+              Age :{" "}
+              {editMode ? (
+                <input
+                  className="edit-input"
+                  defaultValue={user.age}
+                  ref={ageRef}
+                ></input>
+              ) : (
+                user.age
+              )}
+            </p>
+            <p>
+              Gender :{" "}
+              {editMode ? (
+                <input
+                  className="edit-input"
+                  defaultValue={user.gender}
+                  ref={genderRef}
+                ></input>
+              ) : (
+                user.gender
+              )}
+            </p>
+            <p>
+              Address :{" "}
+              {editMode ? (
+                <input
+                  className="edit-input"
+                  defaultValue={user.address}
+                  ref={addressRef}
+                ></input>
+              ) : (
+                user.address
+              )}
+            </p>
           </div>
-          {user.leaves ? (
-            user.leaves.map((leave, key) => (
-              <div key={key}>
-                <span className="admin-detail">{leave.date}</span>
-                <span
-                  className={
-                    leave.status !== "approved" ? "approve" : "approved"
-                  }
-                >
-                  <i>{leave.status}</i>
-                </span>
-                <button onClick={() => deleteLeave(leave)}>Delete</button>
-              </div>
-            ))
-          ) : (
-            <div>Loading...</div>
-          )}
-        </div>
+        </Card>
+        <Card>
+          <div>
+            {user.leaves ? (
+              <>
+                <Space direction="vertical">
+                  <DatePicker onChange={onChangeDate} />
+                </Space>
+                <Button onClick={() => addLeave()} type="primary">
+                  Add Leaves
+                </Button>
+                <Table columns={columns} dataSource={user.leaves} />
+              </>
+            ) : (
+              <div>Loading...</div>
+            )}
+          </div>
+        </Card>
       </div>
     </div>
   );

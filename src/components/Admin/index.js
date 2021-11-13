@@ -1,9 +1,11 @@
 import { useRef } from "react";
+import { Card, Button, Form, Input } from "antd";
 import { addEmployeeByAdmin } from "../../actions/adminActions";
 import { addEmployeeDetails, changeLeaves } from "../../actions/employeeAction";
 import { useDispatch, useSelector } from "react-redux";
 import { employeeData } from "../../mock/employees";
 import Logout from "../Logout";
+import AntDTable from "../AntDTable";
 
 function Admin() {
   const dispatch = useDispatch();
@@ -16,8 +18,8 @@ function Admin() {
     e.preventDefault();
     const newEmployee = {
       e_id: employeeData.length + 1,
-      name: nameRef.current.value,
-      phone: phoneRef.current.value,
+      name: nameRef.current.props.value,
+      phone: phoneRef.current.props.value,
       password: "password",
       age: 0,
       gender: "",
@@ -31,6 +33,7 @@ function Admin() {
   };
 
   const handleApprove = (id, leave) => {
+    console.log(id, leave);
     const selectedEmployee = employeesData.filter((item) => item.e_id === id);
     const leaves = selectedEmployee[0].leaves;
     leaves.map((item) => {
@@ -43,42 +46,69 @@ function Admin() {
 
   return (
     <div className="App">
-      <header className="App-header">Details</header>
       <header className="App-header">
-        Admin
-        <div className="admin-detail">
-          {adminData ? (
-            <div>
-              <p>
-                <b>Name: </b>
-                {adminData.name}
-              </p>
-              <p>
-                <b>Phone: </b>
-                {adminData.phone}
-              </p>
-              <p>
-                <b>years of experience: </b>
-                {adminData.yoe}
-              </p>
-            </div>
-          ) : (
-            <div>loading...</div>
-          )}
+        <div style={{ display: "inline-block" }}>
+          <div style={{ maxWidth: "50%" }}>Admin</div>
+          <Logout />
         </div>
-        <Logout />
       </header>
-      <div className="add-employee">
-        <form>
-          <input type="text" placeholder="add name" ref={nameRef}></input>
-          <input
-            type="number"
-            placeholder="add phone number"
-            ref={phoneRef}
-          ></input>
-          <button onClick={(e) => addEmployee(e)}>Add</button>
-        </form>
+      <div>
+        {adminData ? (
+          <Card title={adminData.name} bordered={true}>
+            <p>
+              <b>Name: </b>
+              {adminData.name}
+            </p>
+            <p>
+              <b>Phone: </b>
+              {adminData.phone}
+            </p>
+            <p>
+              <b>years of experience: </b>
+              {adminData.yoe}
+            </p>
+          </Card>
+        ) : (
+          <div>loading...</div>
+        )}
+        <Card>
+          <Form name="basic" labelCol={{ span: 8 }} wrapperCol={{ span: 10 }}>
+            <Form.Item
+              label="Add Employee Name"
+              name="name"
+              rules={[
+                { required: true, message: "Please input employee name!" },
+              ]}
+            >
+              <Input ref={nameRef} />
+            </Form.Item>
+
+            <Form.Item
+              label="Phone"
+              name="phone"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input employee phone number!",
+                },
+              ]}
+            >
+              <Input.Password ref={phoneRef} type="number" />
+            </Form.Item>
+
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                onClick={(e) => addEmployee(e)}
+              >
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
       </div>
+
       <div className="employee-detail">
         {employeeData ? (
           <div>
@@ -93,23 +123,11 @@ function Admin() {
                         No leaves applied yet
                       </span>
                     ) : (
-                      item.leaves.map((leave, key) => (
-                        <div key={key}>
-                          <span className="admin-detail">{leave.date}</span>
-                          <button
-                            className={
-                              leave.status !== "approved"
-                                ? "approve"
-                                : "approved"
-                            }
-                            onClick={() => handleApprove(item["e_id"], leave)}
-                          >
-                            {leave.status !== "approved"
-                              ? "approve"
-                              : "approved"}
-                          </button>
-                        </div>
-                      ))
+                      <AntDTable
+                        action={handleApprove}
+                        data={item.leaves}
+                        id={item["e_id"]}
+                      />
                     )}
                   </div>
                 </div>

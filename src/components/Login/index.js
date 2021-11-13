@@ -1,5 +1,6 @@
 import "./index.css";
 import { useRef } from "react";
+import { Button, Form, Input, Select } from "antd";
 import { loginUser } from "../../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -26,63 +27,81 @@ function Login() {
       if (user[0].phone === num && user[0].password === pass) {
         return { user: user[0].e_id, type: "employee" };
       } else {
-        return "employee passsword doesn't match";
+        console.log("employee passsword doesn't match");
       }
     } else {
-      return "Employee not found";
+      return false;
     }
   };
 
   const handleSubmit = () => {
-    if (typeRef.current.value === "admin") {
-      if (validateAdmin(numberRef.current.value, passwordRef.current.value)) {
+    const password = passwordRef.current.props.value;
+    const phone = numberRef.current.props.value;
+    const role = typeRef.current.props.value;
+
+    if (role === "admin") {
+      if (validateAdmin(phone, password)) {
         dispatch(loginUser({ user: 0, type: "admin" }));
         navigate("/0");
       } else {
         console.log("admin not found");
       }
-    } else if (typeRef.current.value === "employee") {
-      const user = validateEmployee(
-        numberRef.current.value,
-        passwordRef.current.value
-      );
-      if (typeof user === "object") {
+    } else if (role === "employee") {
+      const user = validateEmployee(phone, password);
+      if (user) {
         dispatch(loginUser(user));
         navigate(`/${user.user}`);
       } else {
-        console.log(user);
+        console.log("Employee not found");
       }
     }
   };
 
   return (
     <div className="Login">
-      <header className="Login-header">
-        Login
-        <form>
-          <input
-            type="number"
-            placeholder="input number here"
-            maxLength="10"
-            ref={numberRef}
-          ></input>
-          <input
-            type="password"
-            placeholder="input password here"
-            ref={passwordRef}
-          ></input>
-          <select name="role" ref={typeRef}>
-            <option defaultValue="" selected disabled hidden>
-              Choose here
-            </option>
-            <option value="admin">Admin</option>
-            <option value="employee">Employee</option>
-          </select>
-        </form>
-        <button type="submit" onClick={() => handleSubmit()}>
-          Submit
-        </button>
-      </header>
+      <header className="Login-header">Login</header>
+      <div className="Login-form">
+        <Form name="basic" labelCol={{ span: 4 }} wrapperCol={{ span: 16 }}>
+          <Form.Item
+            label="Phone"
+            name="phone"
+            rules={[
+              { required: true, message: "Please input your phone number!" },
+            ]}
+          >
+            <Input ref={numberRef} type="number" />
+          </Form.Item>
+
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: "Please input your password!" }]}
+          >
+            <Input.Password ref={passwordRef} />
+          </Form.Item>
+
+          <Form.Item name="role" label="Role" rules={[{ required: true }]}>
+            <Select
+              placeholder="Select your role"
+              defaultValue=""
+              ref={typeRef}
+            >
+              <Select.Option value="admin">Admin</Select.Option>
+              <Select.Option value="employee">Employee</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={() => handleSubmit()}
+            >
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
     </div>
   );
 }

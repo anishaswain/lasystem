@@ -1,6 +1,5 @@
 import "./App.css";
 import Login from "./components/Login";
-import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loadAdminData } from "./actions/adminActions";
@@ -29,9 +28,4 @@ function App() {
     </div>
   );
 }
-
-App.propTypes = {
-  user: PropTypes.number.isRequired,
-};
-
 export default App;

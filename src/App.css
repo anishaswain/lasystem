@@ -1,6 +1,7 @@
+@import "~antd/dist/antd.css";
+
 .App-header {
   background-color: #282c34;
-  min-height: 10vh;
   display: flex;
   flex-direction: column;
   padding-left: 4vmin;
@@ -30,7 +31,7 @@
 }
 
 header {
-  padding-top: 2em;
+  padding: 2em;
 }
 
 .approve {
@@ -43,14 +44,4 @@ header {
   background-color: green;
   color: white;
   margin-left: 5px;
-}
-
-button {
-  padding: 1vmin;
-  margin: 2vmin;
-}
-
-input {
-  height: 4vmin;
-  margin: 1vmin;
 }

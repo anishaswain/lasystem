@@ -8,7 +8,7 @@ export const employeeData = [
     gender: "female",
     address: "No where",
     yoe: 2.3,
-    leaves: [{ date: "07-12-2021", status: "approved" }],
+    leaves: [{ key: 1, date: "2021-12-07", status: "approved" }],
     admin: 0,
   },
   {
@@ -21,8 +21,8 @@ export const employeeData = [
     address: "No where",
     yoe: 2.3,
     leaves: [
-      { date: "07-12-2021", status: "approved" },
-      { date: "10-12-2021", status: "not-approved" },
+      { key: 1, date: "2021-12-01", status: "approved" },
+      { key: 2, date: "2021-11-12", status: "not-approved" },
     ],
     admin: 0,
   },
